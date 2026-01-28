@@ -1,0 +1,44 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "app-backend"
+  namespace: "default"
+  labels:
+    app: "app-backend"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "app-backend"
+  template:
+    metadata:
+      labels:
+        app: "app-backend"
+    spec:
+      containers:
+      - name: "${CONTAINER_NAME}"
+        image: "${CONTAINER_IMAGE}"
+        imagePullPolicy: Always
+---
+apiVersion: "autoscaling/v2"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "app-backend-hpa-cujx"
+  namespace: "default"
+  labels:
+    app: "app-backend"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "app-backend"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      target:
+        type: "Utilization"
+        averageUtilization: 80
