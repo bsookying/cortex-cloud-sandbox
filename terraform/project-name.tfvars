@@ -1,1 +1,1 @@
-project_name = "cortex-cloud-sandbox"
+project_name = "cortex-sandbox"
